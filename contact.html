@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Contactez À côté, la marketplace locale de petites annonces près de chez vous.">
+  <title>Contact | À côté</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d251f;
+      --muted: #69736b;
+      --line: #e7ebdf;
+      --paper: #ffffff;
+      --canvas: #f5f7f2;
+      --green: #2c6647;
+      --green-dark: #214f36;
+      --green-soft: #ebf3ec;
+      --orange: #f0a85d;
+      --shadow: 0 14px 34px rgba(23, 36, 29, 0.08);
+      font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    img { max-width: 100%; display: block; }
+    .container { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+
+    .topbar {
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar-inner {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.08em;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--green);
+      color: white;
+    }
+    .brand-mark svg { width: 19px; height: 19px; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: #58625a;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .nav-links a:hover,
+    .nav-links a:focus-visible { color: var(--green); }
+    .top-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .text-button {
+      background: transparent;
+      border: 0;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #3b433e;
+    }
+    .post-button,
+    .primary-button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      background: var(--green);
+      color: white;
+      font-weight: 700;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .post-button:hover,
+    .primary-button:hover {
+      background: var(--green-dark);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      padding: 68px 0 48px;
+      background: linear-gradient(180deg, #edf3ed 0%, var(--canvas) 100%);
+    }
+    .hero-content {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #ddece0;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .eyebrow svg { width: 14px; height: 14px; }
+    h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.08;
+      letter-spacing: -0.07em;
+    }
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .main { padding: 48px 0 64px; }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    .form-panel {
+      padding: 30px;
+    }
+    .section-title {
+      margin: 0 0 8px;
+      font-size: clamp(26px, 3vw, 32px);
+      letter-spacing: -0.06em;
+    }
+    .section-subtitle {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .contact-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+    .field.full {
+      grid-column: 1 / -1;
+    }
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #3b433d;
+    }
+    .field input,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #dfe5db;
+      border-radius: 12px;
+      background: #fbfcfa;
+      padding: 14px 15px;
+      color: var(--ink);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: rgba(44, 102, 71, 0.7);
+      box-shadow: 0 0 0 4px rgba(44, 102, 71, 0.08);
+    }
+    .field textarea {
+      min-height: 170px;
+      resize: vertical;
+    }
+    .submit-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .submit-row small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .primary-button {
+      padding-inline: 22px;
+      min-height: 48px;
+    }
+
+    .info-panel {
+      padding: 24px;
+      display: grid;
+      gap: 20px;
+    }
+    .info-card {
+      padding: 18px 18px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fafcf9;
+    }
+    .info-title {
+      margin: 0 0 10px;
+      font-size: 15px;
+      letter-spacing: -0.03em;
+    }
+    .info-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: #404b43;
+      font-size: 14px;
+    }
+    .info-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .info-icon {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--green-soft);
+      color: var(--green);
+      flex-shrink: 0;
+    }
+    .info-icon svg { width: 16px; height: 16px; }
+
+    .faq {
+      margin-top: 46px;
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .faq-item {
+      padding: 22px 20px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    .faq-item h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -0.04em;
+    }
+    .faq-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .address-card {
+      margin-top: 38px;
+      padding: 26px 28px;
+      background: linear-gradient(135deg, #eef5ee 0%, #ffffff 100%);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+      align-items: center;
+    }
+    .map-placeholder {
+      min-height: 220px;
+      border-radius: 16px;
+      border: 1px solid #dfe8dd;
+      background:
+        linear-gradient(0deg, rgba(44, 102, 71, 0.10), rgba(44, 102, 71, 0.10)),
+        url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=900&q=80') center/cover no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+    .map-placeholder::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(44, 102, 71, 0.10));
+    }
+    .location-box {
+      display: grid;
+      gap: 12px;
+      padding: 6px 2px;
+    }
+    .location-box h3 {
+      margin: 0;
+      font-size: clamp(22px, 2vw, 28px);
+      letter-spacing: -0.06em;
+    }
+    .location-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .location-box a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    footer {
+      background: #1b2a22;
+      color: rgba(255,255,255,0.8);
+      padding: 44px 0 24px;
+      margin-top: 60px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 30px;
+      padding-bottom: 28px;
+    }
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      margin-bottom: 10px;
+    }
+    .footer-brand .brand-mark {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+    .footer-copy {
+      max-width: 360px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+    .footer-col h4 {
+      margin: 0 0 12px;
+      color: white;
+      font-size: 15px;
+    }
+    .footer-col ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.72);
+    }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      border-top: 1px solid rgba(255,255,255,0.14);
+      padding-top: 18px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.66);
+    }
+
+    @media (max-width: 900px) {
+      .contact-layout,
+      .address-card,
+      .footer-grid,
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .topbar-inner {
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .container { width: min(100% - 28px, 1160px); }
+      .contact-form {
+        grid-template-columns: 1fr;
+      }
+      .submit-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .primary-button {
+        width: 100%;
+      }
+      .footer-bottom {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html" aria-label="Accueil À côté">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 18.5V9.9c0-.7.3-1.3.8-1.8l4.2-3.7c.5-.4 1.1-.4 1.6 0l4.2 3.7c.5.5.8 1.1.8 1.8v8.6H7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.5 18.5v-5.1h5v5.1" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        </span>
+        À côté
+      </a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="index.html#annonces">Annonces</a>
+        <a href="#faq">FAQ</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="top-actions">
+        <button class="text-button" type="button">Se connecter</button>
+        <button class="post-button" type="button">Déposer une annonce</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 12h16M12 4v16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          Nous sommes là pour vous aider
+        </span>
+        <h1>Contactez-nous</h1>
+        <p>Une question, une suggestion ou un besoin de support ? Nous répondons rapidement pour vous accompagner.</p>
+      </div>
+    </section>
+
+    <section class="container main">
+      <div class="contact-layout">
+        <div class="panel form-panel">
+          <h2 class="section-title">Envoyez-nous un message</h2>
+          <p class="section-subtitle">Nous vous répondons sous 24h, généralement plus vite.</p>
+
+          <form class="contact-form" action="#" method="post">
+            <div class="field">
+              <label for="nom">Nom</label>
+              <input id="nom" name="nom" type="text" placeholder="Votre nom" required>
+            </div>
+            <div class="field">
+              <label for="email">Adresse e-mail</label>
+              <input id="email" name="email" type="email" placeholder="prenom@email.com" required>
+            </div>
+            <div class="field full">
+              <label for="objet">Objet</label>
+              <input id="objet" name="objet" type="text" placeholder="Comment pouvons-nous vous aider ?">
+            </div>
+            <div class="field full">
+              <label for="message">Votre message</label>
+              <textarea id="message" name="message" placeholder="Décrivez votre demande..." required></textarea>
+            </div>
+            <div class="field full submit-row">
+              <button class="primary-button" type="submit">Envoyer le message</button>
+              <small>Vos informations sont traitées avec soin et ne sont jamais revendues.</small>
+            </div>
+          </form>
+        </div>
+
+        <aside class="panel info-panel" aria-label="Coordonnées de contact">
+          <div class="info-card">
+            <h3 class="info-title">Contact direct</h3>
+            <ul class="info-list">
+              <li>
+                <span class="info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M4 6.8A2.8 2.8 0 0 1 6.8 4h10.4A2.8 2.8 0 0 1 20 6.8v10.4A2.8 2.8 0 0 1 17.2 20H6.8A2.8 2.8 0 0 1 4 17.2V6.8Z" stroke="currentColor" stroke-width="1.7"/><path d="m5 7 7 5.5L19 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span>bonjour@acote.fr</span>
+              </li>
+              <li>
+                <span class="info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 4.1A2 2 0 0 0 4.6 6v12a2 2 0 0 0 2 2h.4v3l3.6-3H17a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6.6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                </span>
+                <span>+33 4 78 45 15 28</span>
+              </li>
+              <li>
+                <span class="info-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 20.5s6.5-5.3 6.5-11A6.5 6.5 0 1 0 5.5 9.5c0 5.7 6.5 11 6.5 11Z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="9.3" r="2.4" stroke="currentColor" stroke-width="1.7"/></svg>
+                </span>
+                <span>12 place de la République, 69002 Lyon</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h3 class="info-title">Heures d'ouverture</h3>
+            <ul class="info-list">
+              <li><span>Lundi - Vendredi</span><strong>9h00 - 18h30</strong></li>
+              <li><span>Samedi</span><strong>10h00 - 14h00</strong></li>
+              <li><span>Dimanche</span><strong>Fermé</strong></li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h3 class="info-title">Suivez-nous</h3>
+            <ul class="info-list">
+              <li><span>Instagram</span><a href="#">@acote_officiel</a></li>
+              <li><span>Facebook</span><a href="#">À côté</a></li>
+              <li><span>LinkedIn</span><a href="#">À côté entreprise</a></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+      <section id="faq" class="faq" aria-labelledby="faq-title">
+        <div class="section-heading" style="display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin:0;">
+          <h2 id="faq-title" style="margin:0;font-size:28px;letter-spacing:-0.06em;">Questions fréquentes</h2>
+          <p style="margin:0;color:var(--muted);font-size:15px;">Tout ce qu'il faut savoir avant de nous contacter.</p>
+        </div>
+        <div class="faq-grid">
+          <article class="faq-item">
+            <h3>Combien de temps pour une réponse ?</h3>
+            <p>La plupart des demandes reçoivent une réponse sous 24 heures, souvent bien avant.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Je veux signaler une annonce ?</h3>
+            <p>Utilisez le formulaire et précisez le lien concerné, la raison du signalement et le contexte.</p>
+          </article>
+          <article class="faq-item">
+            <h3>Je suis professionnel ?</h3>
+            <p>Oui, nous recevons aussi les demandes d'entreprises, partenariats et campagnes locales.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="address-card" aria-label="Adresse du siège">
+        <div class="location-box">
+          <h3>Rendez-nous visite</h3>
+          <p>Notre équipe est à votre disposition dans nos bureaux à Lyon pour vous aider dans votre recherche de biens ou de services à proximité.</p>
+          <a href="#" aria-label="Voir l'adresse sur la carte">Itinéraire →</a>
+        </div>
+        <div class="map-placeholder" aria-label="Carte approximative du quartier"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M7 18.5V9.9c0-.7.3-1.3.8-1.8l4.2-3.7c.5-.4 1.1-.4 1.6 0l4.2 3.7c.5.5.8 1.1.8 1.8v8.6H7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.5 18.5v-5.1h5v5.1" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </span>
+            À côté
+          </div>
+          <p class="footer-copy">La marketplace locale qui connecte les gens, les voisins et les bonnes affaires autour de chez eux.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="index.html#annonces">Toutes les annonces</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li>bonjour@acote.fr</li>
+            <li>+33 4 78 45 15 28</li>
+            <li>Lyon</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 À côté</span>
+        <span>Mentions légales · Confidentialité · CGV</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
